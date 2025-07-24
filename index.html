@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate File Converter - Convert Any File Format Online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #dfe6e9 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1300px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        
+        header::after {
+            content: "";
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .main-content {
+            padding: 40px;
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin: 35px 0 20px;
+            font-size: 1.8rem;
+            position: relative;
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            border-radius: 2px;
+        }
+        
+        h2 i {
+            margin-right: 15px;
+            color: var(--accent);
+        }
+        
+        .section-description {
+            margin-bottom: 25px;
+            color: #555;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+        
+        .converter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .converter-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            padding: 25px;
+            transition: all 0.3s ease;
+            border-top: 5px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .converter-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+        
+        .converter-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(108,92,231,0.03) 0%, rgba(253,121,168,0.03) 100%);
+            z-index: 1;
+        }
+        
+        .converter-card h3 {
+            color: var(--dark);
+            margin-bottom: 18px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .converter-card h3 i {
+            margin-right: 12px;
+            color: var(--primary);
+            font-size: 1.4rem;
+        }
+        
+        .file-input-wrapper {
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .file-input-label {
+            display: block;
+            background: var(--light);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px dashed #b2bec3;
+            transition: all 0.3s;
+        }
+        
+        .file-input-label:hover {
+            border-color: var(--accent);
+            background: rgba(253,121,168,0.05);
+            transform: scale(1.01);
+        }
+        
+        .file-input-label i {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .file-input-label div {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #dfe6e9;
+            border-radius: 8px;
+            background: white;
+            font-size: 1rem;
+            margin-bottom: 18px;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 2;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(253,121,168,0.2);
+        }
+        
+        .convert-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .convert-btn i {
+            margin-right: 8px;
+        }
+        
+        .convert-btn:hover {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(108,92,231,0.4);
+        }
+        
+        .convert-btn:active {
+            transform: translateY(0);
+        }
+        
+        .file-info {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #636e72;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: var(--accent);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: var(--dark);
+            color: #dfe6e9;
+            font-size: 0.95rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .footer-links a {
+            color: #a29bfe;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .converter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .main-content {
+                padding: 25px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-exchange-alt"></i> Ultimate File Converter</h1>
+            <p class="tagline">Convert any file format online - Fast, Secure & Free</p>
+        </header>
+        
+        <div class="main-content">
+            <h2><i class="fas fa-music"></i> Audio Converter</h2>
+            <p class="section-description">A versatile online audio converter to convert data files in the most common audio file formats with high quality output.</p>
+            
+            <div class="converter-grid">
+                <div class="converter-card">
+                    <h3><i class="fas fa-file-audio"></i> Audio Conversion</h3>
+                    <div class="file-input-wrapper">
+                        <label class="file-input-label" for="audio-file">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <div>Upload Audio File</div>
+                            <input type="file" id="audio-file" class="file-input" accept="audio/*">
+                        </label>
+                    </div>
+                    <select>
+                        <option value="">Select target format...</option>
+                        <option value="mp3">MP3 (MPEG Audio Layer III)</option>
+                        <option value="wav">WAV (Waveform Audio)</option>
+                        <option value="aac">AAC (Advanced Audio Coding)</option>
+                        <option value="flac">FLAC (Free Lossless Audio Codec)</option>
+                        <option value="ogg">OGG (Ogg Vorbis)</option>
+                        <option value="wma">WMA (Windows Media Audio)</option>
+                    </select>
+                    <button class="convert-btn"><i class="fas fa-exchange-alt"></i> Convert Now</button>
+                    <div class="file-info">Supports: MP3, WAV, AAC, FLAC, OGG, WMA, M4A <span class="badge">NEW</span></div>
+                </div>
+                
+                <div class="converter-card">
+                    <h3><i class="fas fa-film"></i> Video to Audio</h3>
+                    <div class="file-input-wrapper">
+                        <label class="file-input-label" for="video-audio-file">
+                            <i class="fas fa-video"></i>
+                            <div>Upload Video File</div>
+                            <input type="file" id="video-audio-file" class="file-input" accept="video/*">
+                        </label>
+                    </div>
+                    <select>
+                        <option value="">Select target format...</option>
+                        <option value="mp3">Extract MP3 Audio</option>
+                        <option value="wav">Extract WAV Audio</option>
+                        <option value="aac">Extract AAC Audio</option>
+                        <option value="japs">JAPS Format <span class="badge">POPULAR</span></option>
+                        <option value="ava">AVA Format</option>
+                    </select>
+                    <button class="convert-btn"><i class="fas fa-headphones"></i> Extract Audio</button>
+                    <div class="file-info">Supports: MP4, AVI, MOV, WMV, FLV, MKV, JAPS, AVA</div>
+                </div>
+                
+                <div class="converter-card">
+                    <h3><i class="fas fa-compress-alt"></i> Audio Compression</h3>
+                    <div class="file-input-wrapper">
+                        <label class="file-input-label" for="compress-audio-file">
+                            <i class="fas fa-file-upload"></i>
+                            <div>Upload Audio File</div>
+                            <input type="file" id="compress-audio-file" class="file-input" accept="audio/*">
+                        </label>
+                    </div>
+                    <select>
+                        <option value="">Select compression level...</option>
+                        <option value="low">Low Compression (High Quality)</option>
+                        <option value="medium">Medium Compression (Balanced)</option>
+                        <option value="high">High Compression (Small Size)</option>
+                        <option value="dmc">DMC Format <span class="badge">NEW</span></option>
+                    </select>
+                    <button class="convert-btn"><i class="fas fa-file-archive"></i> Compress Audio</button>
+                    <div class="file-info">Reduce file size while maintaining quality. Supports DMC format.</div>
+                </div>
+            </div>
+            
+            <h2><i class="fas fa-file-alt"></i> Document Converter</h2>
+            <p class="section-description">Our free document converter allows you to convert Word to PDF, JPG to PDF and many more formats with perfect formatting.</p>
+            
+            <div class="converter-grid">
+                <div class="converter-card">
+                    <h3><i class="fas fa-file-word"></i> Word Conversion</h3>
+                    <div class="file-input-wrapper">
+                        <label class="file-input-label" for="word-file">
+                            <i class="fas fa-file-word"></i>
+                            <div>Upload Word File</div>
+                            <input type="file" id="word-file" class="file-input" accept=".doc,.docx,.rtf">
+                        </label>
+                    </div>
+                    <select>
+                        <option value="">Select target format...</option>
+                        <option value="pdf">PDF (Portable Document)</option>
+                        <option value="docx">DOCX (Word Document)</option>
+                        <option value="doc">DOC (Word 97-2003)</option>
+                        <option value="txt">TXT (Plain Text)</option>
+                        <option value="rtf">RTF (Rich Text Format)</option>
+                        <option value="wind">WIND Format <span class="badge">PRO</span></option>
+                    </select>
+                    <button class="convert-btn"><i class="fas fa-exchange-alt"></i> Convert Word</button>
+                    <div class="file-info">Supports: DOCX, DOC, RTF, WIND, ODT</div>
+                </div>
+                
+                <div class="converter-card">
+                    <h3><i class="fas fa-file-pdf"></i> PDF Tools</h3>
+                    <div class="file-input-wrapper">
+                        <label class="file-input-label" for="pdf-file">
+                            <i class="fas fa-file-pdf"></i>
+                            <div>Upload PDF File</div>
+                            <input type="file" id="pdf-file" class="file-input" accept=".pdf">
+                        </label>
+                    </div>
+                    <select>
+                        <option value="">Select conversion...</option>
+                        <option value="word">PDF to Word (DOCX)</option>
+                        <option value="excel">PDF to Excel (XLSX)</option>
+                        <option value="ppt">PDF to PowerPoint (PPTX)</option>
+                        <option value="jpg">PDF to JPG (Images)</option>
+                        <option value="txt">PDF to Text</option>
+                        <option value="pin">Pin Tokenized DOC <span class="badge">SECURE</span></option>
+                    </select>
+                    <button class="convert-btn"><i class="fas fa-cogs"></i> Process PDF</button>
+                    <div class="file-info">Convert, compress or extract from PDFs. Supports pin tokenized formats.</div>
+                </div>
+                
+                <div class="converter-card">
+                    <h3><i class="fas fa-book"></i> Ebook Converter</h3>
+                    <div class="file-input-wrapper">
+                        <label class="file-input-label" for="ebook-file">
+                            <i class="fas fa-book-open"></i>
+                            <div>Upload Ebook File</div>
+                            <input type="file" id="ebook-file" class="file-input" accept=".epub,.mobi,.pdf">
+                        </label>
+                    </div>
+                    <select>
+                        <option value="">Select target format...</option>
+                        <option value="epub">EPUB (Ebook Format)</option>
+                        <option value="mobi">MOBI (Kindle Format)</option>
+                        <option value="pdf">PDF (Portable Document)</option>
+                        <option value="azw3">AZW3 (Kindle Format)</option>
+                        <option value="pgp">PGP File Format <span class="badge">NEW</span></option>
+                    </select>
+                    <button class="convert-btn"><i class="fas fa-exchange-alt"></i> Convert Ebook</button>
+                    <div class="file-info">Supports: EPUB, MOBI, PDF, AZW3, PGP for your mobile</div>
+                </div>
+            </div>
+            
+            <h2><i class="fas fa-image"></i> Image & Archive Converter</h2>
+            <p class="section-description">Convert between image formats and compress files with our powerful archive tools including 20-inch thin compression technology.</p>
+            
+            <div class="converter-grid">
+                <div class="converter-card">
+                    <h3><i class="fas fa-file-image"></i> Image Conversion</h3>
+                    <div class="file-input-wrapper">
+                        <label class="file-input-label" for="image-file">
+                            <i class="fas fa-image"></i>
+                            <div>Upload Image File</div>
+                            <input type="file" id="image-file" class="file-input" accept="image/*">
+                        </label>
+                    </div>
+                    <select>
+                        <option value="">Select target format...</option>
+                        <option value="jpg">JPG/JPEG (Joint Photographic)</option>
+                        <option value="png">PNG (Portable Network)</option>
+                        <option value="webp">WEBP (Web Picture)</option>
+                        <option value="gif">GIF (Graphics Interchange)</option>
+                        <option value="bmp">BMP (Bitmap Image)</option>
+                        <option value="pgp">PGP Image Format</option>
+                    </select>
+                    <button class="convert-btn"><i class="fas fa-exchange-alt"></i> Convert Image</button>
+                    <div class="file-info">Supports: JPG, PNG, GIF, WEBP, BMP, PGP</div>
+                </div>
+                
+                <div class="converter-card">
+                    <h3><i class="fas fa-file-archive"></i> Archive Converter</h3>
+                    <div class="file-input-wrapper">
+                        <label class="file-input-label" for="archive-file">
+                            <i class="fas fa-file-archive"></i>
+                            <div>Upload Archive File</div>
+                            <input type="file" id="archive-file" class="file-input" accept=".zip,.rar,.7z,.tar,.gz">
+                        </label>
+                    </div>
+                    <select>
+                        <option value="">Select target format...</option>
+                        <option value="zip">ZIP (Compressed Archive)</option>
+                        <option value="rar">RAR (Roshal Archive)</option>
+                        <option value="7z">7Z (7-Zip Archive)</option>
+                        <option value="tar">TAR (Tape Archive)</option>
+                        <option value="thin">20-inch Thin Compression <span class="badge">ULTRA</span></option>
+                    </select>
+                    <button class="convert-btn"><i class="fas fa-compress-arrows-alt"></i> Convert Archive</button>
+                    <div class="file-info">Create archive files with our free compression tool including 20-inch thin technology</div>
+                </div>
+                
+                <div class="converter-card">
+                    <h3><i class="fas fa-share-alt"></i> Webservice Converter</h3>
+                    <div class="file-input-wrapper">
+                        <label class="file-input-label" for="webservice-file">
+                            <i class="fas fa-globe"></i>
+                            <div>Upload File for Web</div>
+                            <input type="file" id="webservice-file" class="file-input" accept="*">
+                        </label>
+                    </div>
+                    <select>
+                        <option value="">Select target service...</option>
+                        <option value="whatsapp">Optimize for WhatsApp</option>
+                        <option value="twitter">Optimize for Twitter</option>
+                        <option value="facebook">Optimize for Facebook</option>
+                        <option value="instagram">Optimize for Instagram</option>
+                        <option value="tiktok">Optimize for TikTok</option>
+                    </select>
+                    <button class="convert-btn"><i class="fas fa-share-square"></i> Optimize File</button>
+                    <div class="file-info">Convert and optimize your files for webservices like WhatsApp, Twitter, Facebook</div>
+                </div>
+            </div>
+            
+            <h2><i class="fas fa-laptop"></i> Device & Software Converters</h2>
+            <p class="section-description">Specialized converters for your mobile devices, gaming consoles and popular software formats.</p>
+            
+            <div class="converter-grid">
+                <div class="converter-card">
+                    <h3><i class="fas fa-mobile-alt"></i> Device Converter</h3>
+                    <div class="file-input-wrapper">
+                        <label class="file-input-label" for="device-file">
+                            <i class="fas fa-tablet-alt"></i>
+                            <div>Upload File</div>
+                            <input type="file" id="device-file" class="file-input" accept="*">
+                        </label>
+                    </div>
+                    <select>
+                        <option value="">Select target device...</option>
+                        <option value="mobile">Mobile Phone</option>
+                        <option value="tablet">Tablet</option>
+                        <option value="gaming">Gaming Console</option>
+                        <option value="smarttv">Smart TV</option>
+                        <option value="ereader">E-Reader</option>
+                    </select>
+                    <button class="convert-btn"><i class="fas fa-exchange-alt"></i> Convert for Device</button>
+                    <div class="file-info">A collection of online video converter for your mobile device, gaming console or tablet</div>
+                </div>
+                
+                <div class="converter-card">
+                    <h3><i class="fas fa-file-excel"></i> Excel Conversion</h3>
+                    <div class="file-input-wrapper">
+                        <label class="file-input-label" for="excel-file">
+                            <i class="fas fa-file-excel"></i>
+                            <div>Upload Excel File</div>
+                            <input type="file" id="excel-file" class="file-input" accept=".xls,.xlsx,.csv">
+                        </label>
+                    </div>
+                    <select>
+                        <option value="">Select target format...</option>
+                        <option value="csv">CSV (Comma Separated)</option>
+                        <option value="xlsx">XLSX (Excel Workbook)</option>
+                        <option value="xls">XLS (Excel 97-2003)</option>
+                        <option value="pdf">PDF (Portable Document)</option>
+                        <option value="json">JSON (JavaScript Object)</option>
+                    </select>
+                    <button class="convert-btn"><i class="fas fa-exchange-alt"></i> Convert Excel</button>
+                    <div class="file-info">Convert your files from PDF to Excel, Excel to PDF and more</div>
+                </div>
+                
+                <div class="converter-card">
+                    <h3><i class="fas fa-cogs"></i> Software Converter</h3>
+                    <div class="file-input-wrapper">
+                        <label class="file-input-label" for="software-file">
+                            <i class="fas fa-desktop"></i>
+                            <div>Upload File</div>
+                            <input type="file" id="software-file" class="file-input" accept="*">
+                        </label>
+                    </div>
+                    <select>
+                        <option value="">Select target software...</option>
+                        <option value="word">Microsoft Word</option>
+                        <option value="excel">Microsoft Excel</option>
+                        <option value="photoshop">Adobe Photoshop</option>
+                        <option value="premiere">Adobe Premiere</option>
+                        <option value="autocad">AutoCAD</option>
+                    </select>
+                    <button class="convert-btn"><i class="fas fa-exchange-alt"></i> Convert for Software</button>
+                    <div class="file-info">Convert your files for specific software applications</div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Ultimate File Converter. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Help Center</a>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Enhanced file input handling
+        document.querySelectorAll('.file-input').forEach(input => {
+            input.addEventListener('change', function(e) {
+                const file = this.files[0];
+                const label = this.parentElement;
+                const fileNameElement = label.querySelector('div');
+                
+                if (file) {
+                    // Display file name with extension
+                    const fileName = file.name.length > 20 
+                        ? file.name.substring(0, 15) + '...' + file.name.split('.').pop() 
+                        : file.name;
+                    fileNameElement.textContent = fileName;
+                    
+                    // Add file size information
+                    const fileSize = (file.size / (1024*1024)).toFixed(2);
+                    const fileInfo = label.parentElement.nextElementSibling.nextElementSibling;
+                    fileInfo.innerHTML = `File: ${fileName} (${fileSize} MB) <span class="badge">READY</span>`;
+                    
+                    // Change icon based on file type
+                    const fileType = file.type.split('/')[0];
+                    const iconMap = {
+                        'audio': 'fa-file-audio',
+                        'video': 'fa-file-video',
+                        'image': 'fa-file-image',
+                        'application': 'fa-file-alt',
+                        'text': 'fa-file-alt'
+                    };
+                    
+                    const iconElement = label.querySelector('i');
+                    if (fileType && iconMap[fileType]) {
+                        iconElement.className = 'fas ' + iconMap[fileType];
+                    } else {
+                        iconElement.className = 'fas fa-file-upload';
+                    }
+                    
+                    // Add animation
+                    label.style.borderColor = '#00b894';
+                    setTimeout(() => {
+                        label.style.borderColor = '#6c5ce7';
+                    }, 1000);
+                } else {
+                    fileNameElement.textContent = 'Upload File';
+                    label.querySelector('i').className = 'fas fa-cloud-upload-alt';
+                }
+            });
+        });
+        
+        // Convert button click handler with progress simulation
+        document.querySelectorAll('.convert-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const card = this.closest('.converter-card');
+                const fileInput = card.querySelector('.file-input');
+                const formatSelect = card.querySelector('select');
+                const originalText = this.innerHTML;
+                
+                if (!fileInput.files.length) {
+                    showAlert('Please select a file to convert', 'warning');
+                    return;
+                }
+                
+                if (!formatSelect.value) {
+                    showAlert('Please select a target format', 'warning');
+                    return;
+                }
+                
+                // Disable during conversion
+                this.disabled = true;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                
+                // Simulate conversion progress
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += 10;
+                    this.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Processing ${progress}%`;
+                    
+                    if (progress >= 100) {
+                        clearInterval(progressInterval);
+                        this.innerHTML = '<i class="fas fa-check"></i> Download';
+                        this.disabled = false;
+                        
+                        // Show success message
+                        showAlert('Conversion complete! Your file is ready to download.', 'success');
+                        
+                        // Reset after 5 seconds
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                        }, 5000);
+                    }
+                }, 300);
+            });
+        });
+        
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                ${message}
+                <span class="close-btn">&times;</span>
+            `;
+            
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.classList.add('show');
+            }, 10);
+            
+            // Close button
+            alert.querySelector('.close-btn').addEventListener('click', () => {
+                alert.classList.remove('show');
+                setTimeout(() => {
+                    alert.remove();
+                }, 300);
+            });
+            
+            // Auto-close after 5 seconds
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => {
+                    alert.remove();
+                }, 300);
+            }, 5000);
+        }
+        
+        // Add alert styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .alert {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 8px;
+                color: white;
+                display: flex;
+                align-items: center;
+                transform: translateX(150%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+                max-width: 400px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            }
+            
+            .alert.show {
+                transform: translateX(0);
+            }
+            
+            .alert i {
+                margin-right: 10px;
+                font-size: 1.2rem;
+            }
+            
+            .alert-success {
+                background: linear-gradient(135deg, #00b894, #55efc4);
+            }
+            
+            .alert-warning {
+                background: linear-gradient(135deg, #fdcb6e, #ffeaa7);
+                color: #2d3436;
+            }
+            
+            .close-btn {
+                margin-left: 15px;
+                cursor: pointer;
+                font-weight: bold;
+                font-size: 1.2rem;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
